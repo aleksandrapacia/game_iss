@@ -14,8 +14,14 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((1263, 655))
         pygame.display.set_caption('ISS - Escape')
+
+        # Ładowanie tekstury tła.
         bg_file = open('earth.jpg')
-        self.bg_image = pygame.image.load(bg_file)
+        self.texture_bg = pygame.image.load(bg_file)
+
+        # Ładowanie tekstury stacji.
+        station_file = open('station.jpg')
+        self.texture_station = pygame.image.load(station_file)
 
     def run_game(self):
         """run_game uruchamia główną pętlę gry."""
@@ -27,7 +33,8 @@ class Game:
                     sys.exit()
 
             # Wyświetlenie tła
-            self.screen.blit(self.bg_image, (0, 0))
+            self.screen.blit(self.texture_bg, (0, 0))
+            self.screen.blit(self.texture_station, (300, 300))
             # Wyrenderowanie wszystkich zmian na ekranie.
             pygame.display.flip()
 
