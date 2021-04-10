@@ -2,8 +2,9 @@
 Gra IssEscape.
 """
 
-import sys
 import pygame
+
+from station import Station
 
 
 class Game:
@@ -13,45 +14,46 @@ class Game:
         """Inicjalizacja gry i utworzenie jej zasobów."""
         pygame.init()
         self.screen = pygame.display.set_mode((1263, 655))
-        pygame.display.set_caption('ISS - Escape')
+        pygame.display.set_caption("ISS - Escape")
 
         # Ładowanie tekstury tła.
-        bg_file = open('earth.jpg')
+        bg_file = open("earth.jpg")
         self.texture_bg = pygame.image.load(bg_file)
 
         # Ładowanie tekstury stacji.
-        station_file = open('station.jpg')
-        self.texture_station = pygame.image.load(station_file)
+        station_file = open("station.jpg")
+        texture_station = pygame.image.load(station_file)
 
-        self.pos_x_station = 300
-        self.is_going_back = False
+        # Utowrzenie obiektu klasy Stacja jako właściwość klasy Game.
+        self.station = Station(300, 300, texture_station)
 
     def run_game(self):
         """run_game uruchamia główną pętlę gry."""
 
         while True:
-            # Zmiana stanu gry:
-            if self.is_going_back:
-                self.pos_x_station -= 1
-            else:
-                self.pos_x_station += 1
-            
-            if self.pos_x_station < 300:
-                self.is_going_back = False
-            elif self.pos_x_station > 600:
-                self.is_going_back = True
-
             # Oczekiwanie na naciśnięcie klawisza lub przycisku myszy.
-            for event in pygame.event.get():
+            all_events = pygame.event.get()
+            for event in all_events:
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    exit()
+
+            all_keys = pygame.key.get_pressed()
+            if all_keys[pygame.K_LEFT]:
+                self.station.pos_x -= 1
+            elif all_keys[pygame.K_RIGHT]:
+                self.station.pos_x += 1
+            elif all_keys[pygame.K_UP]:
+                self.station.pox_y += 1
+            elif all_keys[pygame.K_DOWN]:
+                self.station.pos_y -= 1
 
             # Wyświetlenie tła
             self.screen.blit(self.texture_bg, (0, 0))
-            self.screen.blit(self.texture_station, (self.pos_x_station, 300))
+            self.screen.blit(self.station.texture, (self.station.pos_x, self.station.pos_y))
             # Wyrenderowanie wszystkich zmian na ekranie.
             pygame.display.flip()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     mewa = Game()
     mewa.run_game()
